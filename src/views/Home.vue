@@ -2,6 +2,7 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <el-input v-model="input"></el-input>
   </div>
 </template>
 
@@ -13,6 +14,14 @@ export default {
   name: 'Home',
   components: {
     HelloWorld
+  },
+  data(){
+    return {
+      input: ""
+    }
+  },
+  mounted(){
+    console.log(this.$route)
   }
 }
 </script>

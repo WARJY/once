@@ -1,8 +1,8 @@
-// https://docs.cypress.io/api/introduction/api.html
+import caseFn from '../cases/2021-05-30-22-07-18.js'
 
-describe('My First Test', () => {
-  it('Visits the app root url', () => {
-    cy.visit('/')
-    cy.contains('h1', 'Welcome to Your Vue.js App')
+describe('test', () => {
+  it(`test`, () => {
+    caseFn()
   })
 })
+
