@@ -10,30 +10,10 @@
 
 <script>
 import { init } from '../once'
-import $ from 'jquery'
+
 export default {
     mounted() {
         init(this)
-        // function makeSelector(el) {
-        //     var tag, index, stack = [];
-
-        //     for (; el.parentNode; el = el.parentNode) {
-        //         tag = el.tagName;
-        //         if (tag != "HTML") {
-        //             index = $(el).prevAll().length + 1;
-        //             if (tag == "BODY") {
-        //                 stack.unshift(tag);
-        //             } else {
-        //                 stack.unshift(tag + ':nth-child(' + index + ')');
-        //             }
-        //         }
-        //     }
-        //     return stack.join(' > ');
-        // }
-        // window.addEventListener("click", e=>{
-        //     let query = makeSelector(e.target)
-        //     console.log(query)
-        // })
     }
 }
 </script>

@@ -1,8 +1,10 @@
-import caseFn from '../cases/2021-05-30-22-07-18.js'
+import case1 from '../cases/case1'
 
 describe('test', () => {
-  it(`test`, () => {
-    caseFn()
+
+  it("case1", () => {
+    case1()
   })
+
 })
 
