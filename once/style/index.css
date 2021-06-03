@@ -1,0 +1,17 @@
+.mouseover{
+    position: relative;
+    cursor: pointer;
+    background-color: #f1f1f1;
+    border: solid 1px #ccc;
+    box-sizing: border-box;
+}
+
+/* .mouseover ::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #000;
+} */

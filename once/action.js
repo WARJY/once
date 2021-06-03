@@ -18,7 +18,6 @@ export class Action {
             x: e.x,
             y: e.y
         }
-        console.log(state.hash)
         this.query = this.getQuery(e.target, e.path, state.hash)
         if (EVENT === "VISIT") this.visitUrl = window.location.href
         if (EVENT === "ASSERT") this.assertValue = e.target.textContent
@@ -81,7 +80,9 @@ Action.prototype.getQuery = function (el, path, hash) {
             let attrStr = elAttr.filter((attr, index) => {
                 return attr.name !== hash
             }).map((attr, index) => {
-                return `${currentEl.tagName}[${attr.name}="${attr.value}"]`
+                let value = attr.value
+                if(attr.name==="class" && attr.value.indexOf("mouseover")>-1) value = value.replace("mouseover", "")
+                return `${currentEl.tagName}[${attr.name}="${value}"]`
             }).join(",")
             query.push(attrStr)
         }

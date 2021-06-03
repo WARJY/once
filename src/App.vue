@@ -9,12 +9,7 @@
 </template>
 
 <script>
-import { init } from '../once'
-
 export default {
-    mounted() {
-        init(this)
-    }
 }
 </script>
 

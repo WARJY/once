@@ -3,9 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import element from 'element-ui'
+import once from '../once'
+import '../once/style/index.css'
 
 Vue.use(element)
-
+Vue.use(once)
 Vue.config.productionTip = false
 
 new Vue({

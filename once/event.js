@@ -1,5 +1,20 @@
 import { Action } from './action'
 
+export const watchHover = function (state) {
+    let lastEl = ""
+    let hoverHandler = e => {
+        if(lastEl === e.target) return
+        if(lastEl) lastEl.className = lastEl.className.replace("mouseover", "")
+        e.target.className = `${e.target.className} mouseover`
+        lastEl = e.target
+    }
+
+    document.addEventListener("mouseover", hoverHandler)
+    return () => {
+        document.removeEventListener("mouseover", hoverHandler)
+    }
+}
+
 export const watchClick = function (state) {
     let clickHandler = e => {
         state.state = "CLICK"

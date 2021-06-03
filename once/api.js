@@ -1,4 +1,4 @@
-import { watchClick, watchCopy, watchInput, watchHash } from './event.js'
+import { watchHover, watchClick, watchCopy, watchInput, watchHash } from './event.js'
 import { Action } from './action.js'
 import { writeFile } from './server/index.js'
 
@@ -13,11 +13,13 @@ export const initApi = function (data) {
         let watchCopyStop = watchCopy(data)
         let watchInputStop = watchInput(data)
         let watchHashStop = watchHash(data)
+        let watchHoverStop = watchHover(data)
 
         testCaseStop.push(watchClickStop)
         testCaseStop.push(watchCopyStop)
         testCaseStop.push(watchInputStop)
         testCaseStop.push(watchHashStop)
+        testCaseStop.push(watchHoverStop)
 
         return console.log("testcase 开始！")
     }
