@@ -4,7 +4,7 @@ export const watchHover = function (state) {
     let lastEl = ""
     let hoverHandler = e => {
         if(lastEl === e.target) return
-        if(lastEl) lastEl.className = lastEl.className.replace("mouseover", "")
+        if(lastEl) lastEl.className = lastEl.className.replace(" mouseover", "")
         e.target.className = `${e.target.className} mouseover`
         lastEl = e.target
     }
@@ -47,6 +47,20 @@ export const watchInput = function (state) {
     return () => document.removeEventListener("input", inputHandler)
 }
 
+export const watchSelect = function (state) {
+    let selectHandler = e => {
+        console.log(e)
+        state.state = "SELECT"
+        state.actionPath.push(new Action("SELECT", e, state))
+        logTable(state.actionPath)
+    }
+    document.querySelectorAll("input").forEach((item,index)=>{
+        console.log(item)
+        item.addEventListener("change", selectHandler)
+    })
+    return () => document.querySelectorAll("select").removeEventListener("change", selectHandler)
+}
+
 export const watchHash = function (state) {
     let hashHandler = e => {
         console.log(e)
@@ -56,6 +70,6 @@ export const watchHash = function (state) {
 }
 
 const logTable = function(data){
-    console.clear()
+    // console.clear()
     console.table(data)
 }

@@ -3,6 +3,10 @@
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
     <el-input v-model="input"></el-input>
+    <el-select v-model="input">
+      <el-option label="1" value="1"></el-option>
+      <el-option label="2" value="2"></el-option>
+    </el-select>
   </div>
 </template>
 

@@ -12,6 +12,7 @@ export class Action {
     target = ""
 
     constructor(EVENT, e, state) {
+        console.log(e)
         this.EVENT = EVENT
         this.target = e.target
         this.position = {
@@ -19,9 +20,10 @@ export class Action {
             y: e.y
         }
         this.query = this.getQuery(e.target, e.path, state.hash)
+        this.text = e.target ? e.target.innerText : ""
         if (EVENT === "VISIT") this.visitUrl = window.location.href
-        if (EVENT === "ASSERT") this.assertValue = e.target.textContent
-        if (EVENT === "ASSERT") this.assertUrl = state.vm.$route.matched[0].regex
+        if (EVENT === "ASSERT") this.assertValue = e.target.innerText
+        if (EVENT === "ASSERT") this.assertUrl = this.getRouter(state.vm)
         if (EVENT === "INPUT") this.inputValue = e.target.value
         Object.freeze(this)
     }
@@ -81,8 +83,9 @@ Action.prototype.getQuery = function (el, path, hash) {
                 return attr.name !== hash
             }).map((attr, index) => {
                 let value = attr.value
-                if(attr.name==="class" && attr.value.indexOf("mouseover")>-1) value = value.replace("mouseover", "")
-                return `${currentEl.tagName}[${attr.name}="${value}"]`
+                if (attr.name === "class" && attr.value.indexOf("mouseover") > -1) value = value.replace(" mouseover", "")
+                if (value) return `${currentEl.tagName}[${attr.name}="${value}"]`
+                return `${currentEl.tagName}`
             }).join(",")
             query.push(attrStr)
         }
@@ -123,6 +126,10 @@ Action.prototype.getQuery = function (el, path, hash) {
             nth: queryBythNth
         }
     }
+}
+
+Action.prototype.getRouter = function (vm) {
+    return vm.$route.matched[0].regex
 }
 
 // 行为元素

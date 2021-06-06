@@ -14,6 +14,18 @@ const writeFile = function (json) {
         if (action.EVENT === "INPUT") caseCode += `
         ${query}.type("${action.inputValue}")
         `
+
+        if (action.EVENT === "ASSERT" && action.assertUrl) caseCode += `
+        cy.location().should((location) => {
+            expect(location.pathname).to.match(${action.assertUrl})
+        })
+        `
+
+        if (action.EVENT === "ASSERT" && action.assertValue) caseCode += `
+        ${query}.should(($div) => {
+            expect($div.get(0).innerText).to.eq('${action.assertValue}')
+        })
+        `
     })
 
     caseCode = `

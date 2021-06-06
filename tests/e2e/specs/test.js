@@ -1,14 +1,9 @@
-import case1 from '../cases/case1'
-import case2 from '../cases/case2'
+import case1 from '../cases/case'
 
 describe('test', () => {
 
-  it("case1", () => {
+  it("case", () => {
     case1()
-  })
-
-  it("case2", () => {
-    case2()
   })
 
 })
