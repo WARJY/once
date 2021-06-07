@@ -7,8 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import once from '../once'
 import '../once/style/index.css'
 
+Vue.use(once, { element })
 Vue.use(element)
-Vue.use(once)
 Vue.config.productionTip = false
 
 new Vue({

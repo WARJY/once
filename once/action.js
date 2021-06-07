@@ -12,7 +12,6 @@ export class Action {
     target = ""
 
     constructor(EVENT, e, state) {
-        console.log(e)
         this.EVENT = EVENT
         this.target = e.target
         this.position = {

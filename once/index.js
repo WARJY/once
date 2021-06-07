@@ -1,4 +1,5 @@
 import { initApi } from './api.js'
+import Select from './components/select/index'
 
 const initData = function (data, vm) {
     data.vm = vm
@@ -27,7 +28,11 @@ const init = function (vm) {
 }
 
 const Once = {
-    install(Vue, options) {
+    install(Vue, params, options ) {
+        console.log(params)
+        if(params.element){
+            params.element.Select = Select
+        }
         Vue.mixin({
             mounted: function () {
                 init(this)

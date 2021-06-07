@@ -3,7 +3,7 @@
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
     <el-input v-model="input"></el-input>
-    <el-select v-model="input">
+    <el-select v-model="input2">
       <el-option label="1" value="1"></el-option>
       <el-option label="2" value="2"></el-option>
     </el-select>
@@ -21,7 +21,8 @@ export default {
   },
   data(){
     return {
-      input: ""
+      input: "",
+      input2: ""
     }
   },
   mounted(){
