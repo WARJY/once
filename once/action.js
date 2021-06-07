@@ -24,6 +24,7 @@ export class Action {
         if (EVENT === "ASSERT") this.assertValue = e.target.innerText
         if (EVENT === "ASSERT") this.assertUrl = this.getRouter(state.vm)
         if (EVENT === "INPUT") this.inputValue = e.target.value
+        if (EVENT === "SELECT") this.selectValue = e.value
         Object.freeze(this)
     }
 }

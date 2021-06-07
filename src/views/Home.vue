@@ -7,6 +7,7 @@
       <el-option label="1" value="1"></el-option>
       <el-option label="2" value="2"></el-option>
     </el-select>
+    <input/>
   </div>
 </template>
 

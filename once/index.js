@@ -29,10 +29,7 @@ const init = function (vm) {
 
 const Once = {
     install(Vue, params, options ) {
-        console.log(params)
-        if(params.element){
-            params.element.Select = Select
-        }
+        Vue.component("ElSelect", Select)
         Vue.mixin({
             mounted: function () {
                 init(this)

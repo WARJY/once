@@ -503,6 +503,10 @@
       },
 
       emitChange(val) {
+        var evt = document.createEvent('HTMLEvents');
+        evt.initEvent('select', true, true);
+        evt.value = val
+        this.$el.dispatchEvent(evt);
         if (!valueEquals(this.value, val)) {
           this.$emit('change', val);
         }

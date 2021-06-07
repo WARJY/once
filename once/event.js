@@ -49,15 +49,13 @@ export const watchInput = function (state) {
 
 export const watchSelect = function (state) {
     let selectHandler = e => {
-        console.log(e)
         state.state = "SELECT"
         state.actionPath.push(new Action("SELECT", e, state))
         logTable(state.actionPath)
     }
-    document.querySelectorAll("input").forEach((item,index)=>{
-        item.addEventListener("change", selectHandler)
-    })
-    return () => document.querySelectorAll("input").removeEventListener("change", selectHandler)
+    document.addEventListener("select", selectHandler)
+    
+    return () => document.removeEventListener("select", selectHandler)
 }
 
 export const watchHash = function (state) {
