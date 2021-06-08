@@ -1,5 +1,6 @@
 import { initApi } from './api.js'
 import Select from './components/select/index'
+import Option from './components/select/src/option.vue'
 
 const initData = function (data, vm) {
     data.vm = vm
@@ -30,6 +31,7 @@ const init = function (vm) {
 const Once = {
     install(Vue, params, options ) {
         Vue.component("ElSelect", Select)
+        Vue.component("ElOption", Option)
         Vue.mixin({
             mounted: function () {
                 init(this)

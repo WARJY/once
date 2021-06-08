@@ -1,7 +1,7 @@
 <template>
   <li
     @mouseenter="hoverItem"
-    @click.stop="selectOptionClick"
+    @click="selectOptionClick"
     class="el-select-dropdown__item"
     v-show="visible"
     :class="{
@@ -129,6 +129,9 @@
       },
 
       selectOptionClick() {
+        var evt = document.createEvent('HTMLEvents');
+        evt.initEvent('optionclick', true, true);
+        this.$el.dispatchEvent(evt);
         if (this.disabled !== true && this.groupDisabled !== true) {
           this.dispatch('ElSelect', 'handleOptionClick', [this, true]);
         }

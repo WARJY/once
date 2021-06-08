@@ -2,7 +2,7 @@
   <div
     class="el-select"
     :class="[selectSize ? 'el-select--' + selectSize : '']"
-    @click.stop="toggleMenu"
+    @click="toggleMenu"
     v-clickoutside="handleClose">
     <div
       class="el-select__tags"
@@ -55,7 +55,7 @@
         @keydown.down.prevent="navigateOptions('next')"
         @keydown.up.prevent="navigateOptions('prev')"
         @keydown.enter.prevent="selectOption"
-        @keydown.esc.stop.prevent="visible = false"
+        @keydown.esc.prevent="visible = false"
         @keydown.delete="deletePrevTag"
         @keydown.tab="visible = false"
         @compositionstart="handleComposition"
@@ -84,10 +84,10 @@
       @focus="handleFocus"
       @blur="handleBlur"
       @keyup.native="debouncedOnInputChange"
-      @keydown.native.down.stop.prevent="navigateOptions('next')"
-      @keydown.native.up.stop.prevent="navigateOptions('prev')"
+      @keydown.native.down.prevent="navigateOptions('next')"
+      @keydown.native.up.prevent="navigateOptions('prev')"
       @keydown.native.enter.prevent="selectOption"
-      @keydown.native.esc.stop.prevent="visible = false"
+      @keydown.native.esc.prevent="visible = false"
       @keydown.native.tab="visible = false"
       @paste.native="debouncedOnInputChange"
       @mouseenter.native="inputHovering = true"
@@ -503,10 +503,10 @@
       },
 
       emitChange(val) {
-        var evt = document.createEvent('HTMLEvents');
-        evt.initEvent('select', true, true);
-        evt.value = val
-        this.$el.dispatchEvent(evt);
+        // var evt = document.createEvent('HTMLEvents');
+        // evt.initEvent('select', true, true);
+        // evt.value = val
+        // this.$el.dispatchEvent(evt);
         if (!valueEquals(this.value, val)) {
           this.$emit('change', val);
         }
@@ -758,7 +758,7 @@
       },
 
       deleteSelected(event) {
-        event.stopPropagation();
+        // event.stopPropagation();
         const value = this.multiple ? [] : '';
         this.$emit('input', value);
         this.emitChange(value);
@@ -775,7 +775,7 @@
           this.emitChange(value);
           this.$emit('remove-tag', tag.value);
         }
-        event.stopPropagation();
+        // event.stopPropagation();
       },
 
       onInputChange() {
