@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import $, { css } from 'jquery'
 
 // 测试行为
 export class Action {
@@ -87,7 +87,18 @@ Action.prototype.getQuery = function (el, path, hash) {
                 if (value) return `${currentEl.tagName}[${attr.name}="${value}"]`
                 return `${currentEl.tagName}`
             }).join(",")
-            query.push(attrStr)
+            let currentQuery = [...query, attrStr].join(">")
+            let preSelect = Array.from(document.querySelectorAll(currentQuery))
+            if (preSelect.length === 1) query.push(attrStr)
+            else {
+                console.log(preSelect)
+                let nth = 0
+                preSelect.forEach((item, index) => {
+                    if (item === currentEl) nth = index
+                })
+                attrStr += `:nth-of-type(${nth + 1})`
+                query.push(attrStr)
+            }
         }
     }
     query = query.filter((item, index) => {
@@ -117,94 +128,11 @@ Action.prototype.getQuery = function (el, path, hash) {
     }
 
     return {
-        queryByAttr: {
-            query: query,
-            nth: queryByAttrNth
-        },
-        queryByth: {
-            query: queryByth,
-            nth: queryBythNth
-        }
+        query: query,
+        nth: queryByAttrNth
     }
 }
 
 Action.prototype.getRouter = function (vm) {
     return vm.$route.matched[0].regex
-}
-
-// 行为元素
-export class Element {
-    el = ""
-    elClass = []
-    elPath = []
-    elId = ""
-    HTML = ""
-    tagName = ""
-    query = ""
-
-    constructor(el, path) {
-        if (el) {
-            this.el = el
-            this.elId = el.id
-            this.elClass = el.className.split(" ")
-            this.tagName = el.tagName
-        }
-        if (path) this.elPath = this.formatPath(path)
-        if (this.elPath.length > 0) this.query = this.getQuery(this.elPath)
-
-        Object.freeze(this)
-    }
-}
-
-Element.prototype.formatPath = function (path) {
-    let _path = path.filter((item, index) => {
-        return item !== window && item !== document && item !== document.body && item.tagName !== "HTML"
-    }).map((item, index) => {
-        return new Element(item)
-    })
-    return _path
-}
-
-Element.prototype.getQuery = function (elPath) {
-    let query = []
-    while (elPath.length > 0) {
-        let currentEl = elPath.pop()
-        let elClass = this.getClass(currentEl.elClass)
-        let elId = currentEl.elId ? `#${currentEl.elId}` : ""
-        query.push(`${currentEl.tagName}${elClass}${elId}`)
-    }
-    query = query.join(">")
-
-    let preEls = document.querySelectorAll(query)
-    let preElsByth = this.getQueryByth()
-    console.log(preEls)
-    if (preEls.length === 1) return query
-
-
-}
-
-Element.prototype.getQueryByth = function (el) {
-    let tag, index, stack = [];
-
-    for (; el.parentNode; el = el.parentNode) {
-        tag = el.tagName;
-        if (tag != "HTML") {
-            index = $(el).prevAll().length + 1;
-            if (tag == "BODY") {
-                stack.unshift(tag);
-            } else {
-                stack.unshift(tag + ':nth-child(' + index + ')');
-            }
-        }
-    }
-    return stack.join(' > ');
-}
-
-Element.prototype.getClass = function (elClass) {
-    if (elClass.length > 0) {
-        return elClass.reduce((total, item, index) => {
-            if (item) return `${total}.${item}`
-            return total
-        }, "")
-    }
 }

@@ -5,7 +5,7 @@ const writeFile = function (json) {
         cy.visit("${action.visitUrl}")
         `
 
-        query = `cy.get('${action.query.queryByAttr.query}').eq(${action.query.queryByAttr.nth})`
+        query = `cy.get('${action.query.query}').eq(${action.query.nth})`
 
         if (action.EVENT === "CLICK") caseCode += `
         ${query}.click()
