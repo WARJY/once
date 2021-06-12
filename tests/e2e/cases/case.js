@@ -1,53 +1,97 @@
 
     export default function(){
         
-        cy.visit("http://192.168.31.253:8080/")
+        cy.visit("http://localhost:8080/")
         
-        cy.get('DIV[id="app"]>DIV[id="nav"],DIV:nth-of-type(2)>A[href="/about"],A:nth-of-type(3)').eq(0).click()
+        cy.get('html body div#app div.home div.hello h1').eq(0).invoke('mouseover')
         
-        cy.get('DIV[id="app"]>DIV[id="nav"],DIV:nth-of-type(2)>A[href="/"],A[class="router-link-exact-active router-link-active"],A[aria-current="page"]:nth-of-type(2)').eq(1).click()
+        cy.get('html body div#app div.home div.hello h1').eq(0).click({ force: true })
         
-        cy.get('DIV[id="app"]>DIV[class="home"]>DIV[class="hello"]>H1').eq(0).click()
+        cy.get('html body div#app div.home img').eq(0).invoke('mouseover')
         
         cy.location().should((location) => {
             expect(location.pathname).to.match(/^(?:\/(?=$))?$/i)
         })
         
-        cy.get('DIV[id="app"]>DIV[class="home"]>DIV[class="hello"]>H1').eq(0).should(($div) => {
+        cy.get('html body div#app div.home div.hello h1').eq(0).should(($div) => {
             expect($div.get(0).innerText).to.eq('Welcome to Your Vue.js App')
         })
         
-        cy.get('DIV[id="app"]>DIV[id="nav"],DIV:nth-of-type(2)>A[href="/about"],A[class="router-link-exact-active router-link-active"],A[aria-current="page"]:nth-of-type(2)').eq(1).click()
+        cy.get('html body div#app div#nav a').eq(1).invoke('mouseover')
         
-        cy.get('DIV[id="app"],DIV:nth-of-type(1)>DIV[class="about"]:nth-of-type(2)>H1:nth-of-type(2)').eq(0).click()
+        cy.get('html body div#app div#nav a').eq(1).click({ force: true })
+        
+        cy.get('html body div#app div.about h1').eq(0).invoke('mouseover')
+        
+        cy.get('html body div#app div.about h1').eq(0).click({ force: true })
         
         cy.location().should((location) => {
             expect(location.pathname).to.match(/^\/about(?:\/(?=$))?$/i)
         })
         
-        cy.get('DIV[id="app"],DIV:nth-of-type(1)>DIV[class="about"]:nth-of-type(2)>H1:nth-of-type(2)').eq(0).should(($div) => {
+        cy.get('html body div#app div.about h1').eq(0).should(($div) => {
             expect($div.get(0).innerText).to.eq('This is an about page')
         })
         
-        cy.get('DIV[id="app"],DIV:nth-of-type(1)>DIV[id="nav"],DIV:nth-of-type(2)>A[href="/"],A[class="router-link-exact-active router-link-active"],A[aria-current="page"]:nth-of-type(3)').eq(2).click()
+        cy.get('html body div#app div#nav a.router-link-active').eq(0).invoke('mouseover')
         
-        cy.get('DIV[id="app"],DIV:nth-of-type(1)>DIV[class="home"]:nth-of-type(2)>DIV[class="hello"]:nth-of-type(2)>H1').eq(0).click()
+        cy.get('html body div#app div#nav a.router-link-active').eq(0).click({ force: true })
         
-        cy.location().should((location) => {
-            expect(location.pathname).to.match(/^(?:\/(?=$))?$/i)
-        })
+        cy.get('html body div#app div.home div.el-select div.el-input.el-input--suffix input').eq(0).invoke('mouseover')
         
-        cy.get('DIV[id="app"],DIV:nth-of-type(1)>DIV[class="home"]>DIV[class="hello"]>H1').eq(0).should(($div) => {
-            expect($div.get(0).innerText).to.eq('Welcome to Your Vue.js App')
-        })
+        cy.get('html body div#app div.home div.el-select div.el-input.el-input--suffix input').eq(0).click({ force: true })
         
-        cy.get('DIV[id="app"],DIV:nth-of-type(1)>DIV[class="home"]:nth-of-type(2)>INPUT:nth-of-type(2)').eq(0).click()
+        cy.get('html body div.el-select-dropdown.el-popper div.el-scrollbar div.el-select-dropdown__wrap.el-scrollbar__wrap ul li.el-select-dropdown__item').eq(0).invoke('mouseover')
         
-        cy.get('DIV[id="app"],DIV:nth-of-type(1)>DIV[class="home"]>INPUT').eq(0).type("123")
+        cy.get('html body div.el-select-dropdown.el-popper div.el-scrollbar div.el-select-dropdown__wrap.el-scrollbar__wrap ul li.el-select-dropdown__item').eq(0).click({ force: true })
         
-        cy.get('DIV[id="app"],DIV:nth-of-type(1)>DIV[class="home"]:nth-of-type(2)>DIV[class="el-select"]:nth-of-type(2)>DIV[class="el-input el-input--suffix is-focus"]>INPUT[type="text"],INPUT[readonly="readonly"],INPUT[autocomplete="off"],INPUT[placeholder="请选择"],INPUT[class="el-input__inner"]:nth-of-type(3)').eq(2).click()
+        cy.get('html body div#app div.home input').eq(2).invoke('mouseover')
         
-        cy.get('DIV[class="el-select-dropdown el-popper"],DIV[style="min-width: 217.5px; position: absolute; top: 791px; left: 447px; transform-origin: center top; z-index: 2001;"],DIV[x-placement="bottom-start"]>DIV[class="el-scrollbar"],DIV:nth-of-type(9)>DIV[class="el-select-dropdown__wrap el-scrollbar__wrap"],DIV[style="margin-bottom: -17px; margin-right: -17px;"]:nth-of-type(3)>UL[class="el-scrollbar__view el-select-dropdown__list"]:nth-of-type(1)>LI[class="el-select-dropdown__item hover"]:nth-of-type(1)').eq(0).click()
+        cy.get('html body div#app div.home input').eq(2).click({ force: true })
+        
+        cy.get('html body div#app div.home input').eq(2).type("1")
+        
+        cy.get('html body div#app div.home').eq(0).invoke('mouseover')
+        
+        cy.get('html body div#app div.home input').eq(2).type("12")
+        
+        cy.get('html body div#app div.home div.el-checkbox-group label.el-checkbox.is-disabled span.el-checkbox__label').eq(1).invoke('mouseover')
+        
+        cy.get('html body div#app div.home input').eq(2).type("123")
+        
+        cy.get('html body div#app div.home div.el-radio-group label.el-radio span.el-radio__label').eq(0).invoke('mouseover')
+        
+        cy.get('html body div#app div.home div.el-radio-group label.el-radio span.el-radio__label').eq(0).click({ force: true })
+        
+        cy.get('html body div#app div.home div.el-radio-group label.el-radio span.el-radio__input span').eq(1).invoke('mouseover')
+        
+        cy.get('html body div#app div.home div.el-radio-group label.el-radio span.el-radio__input span').eq(1).click({ force: true })
+        
+        cy.get('html body div#app div.home div.el-radio-group label.el-radio span.el-radio__label').eq(2).invoke('mouseover')
+        
+        cy.get('html body div#app div.home div.el-radio-group label.el-radio span.el-radio__label').eq(2).click({ force: true })
+        
+        cy.get('html body div#app div.home div.el-checkbox-group label.el-checkbox span.el-checkbox__label').eq(0).invoke('mouseover')
+        
+        cy.get('html body div#app div.home div.el-checkbox-group label.el-checkbox span.el-checkbox__label').eq(0).click({ force: true })
+        
+        cy.get('html body div#app div.home div.el-checkbox-group label.el-checkbox span.el-checkbox__input span').eq(1).invoke('mouseover')
+        
+        cy.get('html body div#app div.home div.el-checkbox-group label.el-checkbox span.el-checkbox__input span').eq(1).click({ force: true })
+        
+        cy.get('html body div#app div.home div.el-checkbox-group').eq(0).invoke('mouseover')
+        
+        cy.get('html body div#app div.home div.el-checkbox-group').eq(0).click({ force: true })
+        
+        cy.get('html body div#app div.home div.el-cascader div.el-input.el-input--suffix input').eq(0).invoke('mouseover')
+        
+        cy.get('html body div#app div.home div.el-cascader div.el-input.el-input--suffix input').eq(0).click({ force: true })
+        
+        cy.get('html body div#app div.home div.el-switch.is-checked span').eq(0).invoke('mouseover')
+        
+        cy.get('html body div#app div.home div.el-switch.is-checked span').eq(0).click({ force: true })
+        
+        cy.get('html').eq(0).invoke('mouseover')
         
     }
     

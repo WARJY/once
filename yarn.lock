@@ -7161,6 +7161,11 @@ select-hose@^2.0.0:
   resolved "https://registry.nlark.com/select-hose/download/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
+selector-generator@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.nlark.com/selector-generator/download/selector-generator-0.3.1.tgz#10bbfcaeee9deabaae0d5173edba100f69fd0b9e"
+  integrity sha1-ELv8ru6d6rquDVFz7boQD2n9C54=
+
 selfsigned@^1.10.8:
   version "1.10.11"
   resolved "https://registry.nlark.com/selfsigned/download/selfsigned-1.10.11.tgz#24929cd906fe0f44b6d01fb23999a739537acbe9"
@@ -7778,6 +7783,11 @@ terser@^4.1.2:
     commander "^2.20.0"
     source-map "~0.6.1"
     source-map-support "~0.5.12"
+
+test-once@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/test-once/-/test-once-1.0.0.tgz#757014c94f8a622fcb5d3f3da18106018b347b13"
+  integrity sha512-/zoLLHYjhR4IvImEZfwY3Noc3ECf1apy5697meH0s1kjIS3HErivJmmjsiq4tgxJhyHJOi7wrTIs7Qtv2+QV0g==
 
 thenify-all@^1.0.0:
   version "1.6.0"
