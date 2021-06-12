@@ -1,17 +1,12 @@
 import $, { css } from 'jquery'
+import 'selector-generator'
+
+const generator = new SelectorGenerator();
 
 // 测试行为
 export class Action {
-    EVENT = ""
-    el = ""
-    position = {}
-    visitUrl = ""
-    assertUrl = ""
-    assertValue = ""
-    inputValue = ""
-    target = ""
-
     constructor(EVENT, e, state) {
+        this.timeStamp = new Date().getTime()
         this.EVENT = EVENT
         this.target = e.target
         this.position = {
@@ -25,7 +20,7 @@ export class Action {
         if (EVENT === "ASSERT") this.assertUrl = this.getRouter(state.vm)
         if (EVENT === "INPUT") this.inputValue = e.target.value
         if (EVENT === "SELECT") this.selectValue = e.value
-        Object.freeze(this)
+        // Object.freeze(this)
     }
 }
 
@@ -67,6 +62,27 @@ Action.prototype.getQueryByth = function (el) {
 Action.prototype.getQuery = function (el, path, hash) {
     if (!path) return
 
+    let selector = generator.getSelector(el)
+    let path2 = generator.getPath(el)
+
+    path2 = path2.replace(/.mouseover/g, "")
+    path2 = path2.replace(".hover", "")
+
+    let queryNth = 0
+    let preEls = Array.from(document.querySelectorAll(path2))
+
+    if (preEls.length > 1) {
+        preEls.forEach((item, index) => {
+            if (item === el) return queryNth = index
+        })
+    }
+
+    return {
+        tagName: el.tagName,
+        query: path2,
+        nth: queryNth
+    }
+
     // 通过:nth层级获取的元素query
     let queryByth = this.getQueryByth(el)
     // console.log("queryByth", query)
@@ -87,33 +103,31 @@ Action.prototype.getQuery = function (el, path, hash) {
                 if (value) return `${currentEl.tagName}[${attr.name}="${value}"]`
                 return `${currentEl.tagName}`
             }).join(",")
-            let currentQuery = [...query, attrStr].join(">")
-            let preSelect = Array.from(document.querySelectorAll(currentQuery))
-            if (preSelect.length === 1) query.push(attrStr)
-            else {
-                console.log(preSelect)
-                let nth = 0
-                preSelect.forEach((item, index) => {
-                    if (item === currentEl) nth = index
-                })
-                attrStr += `:nth-of-type(${nth + 1})`
-                query.push(attrStr)
-            }
+            // let currentQuery = [...query, attrStr].join(">")
+            // let preSelect = Array.from(document.querySelectorAll(currentQuery))
+            // if (preSelect.length === 1) query.push(attrStr)
+            // else {
+            //     console.log(preSelect)
+            //     let nth = 0
+            //     preSelect.forEach((item, index) => {
+            //         if (item === currentEl) nth = index
+            //     })
+            //     attrStr += `:nth-of-type(${nth + 1})`
+            //     query.push(attrStr)
+            // }
+            query.push(attrStr)
         }
     }
     query = query.filter((item, index) => {
         return item
     })
     query = query.join(">")
-    // console.log("queryByAttr", query)
+    console.log("queryByAttr", query)
 
     // 获取query的元素列表用于检查
     let queryByAttrNth = 0
-    let queryBythNth = 0
     let preElsByAttr = Array.from(document.querySelectorAll(query))
-    let preElsByth = Array.from(document.querySelectorAll(queryByth))
-    // console.log(preElsByAttr)
-    // console.log(preElsByth)
+    console.log(preElsByAttr)
 
     if (preElsByAttr.length > 1) {
         preElsByAttr.forEach((item, index) => {
@@ -121,13 +135,8 @@ Action.prototype.getQuery = function (el, path, hash) {
         })
     }
 
-    if (preElsByth.length > 1) {
-        preElsByth.forEach((item, index) => {
-            if (item === el) queryBythNth = index
-        })
-    }
-
     return {
+        tagName: el.tagName,
         query: query,
         nth: queryByAttrNth
     }
@@ -135,4 +144,8 @@ Action.prototype.getQuery = function (el, path, hash) {
 
 Action.prototype.getRouter = function (vm) {
     return vm.$route.matched[0].regex
+}
+
+Action.prototype.setEvent = function (EVENT) {
+    return this.EVENT = EVENT
 }

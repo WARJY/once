@@ -3,10 +3,20 @@ import { Action } from './action'
 export const watchHover = function (state) {
     let lastEl = ""
     let hoverHandler = e => {
-        if(lastEl === e.target) return
-        if(lastEl) lastEl.className = lastEl.className.replace(" mouseover", "")
-        e.target.className = `${e.target.className} mouseover`
+        if (lastEl === e.target) return
+
+        state.state = "HOVER"
+        let lastAction = state.actionPath[state.actionPath.length - 1]
+        if (lastAction.EVENT === "HOVER") state.actionPath.pop()
+        state.actionPath.push(new Action("HOVER", e, state))
+
+        if (e.target.className) {
+            if (lastEl) lastEl.setAttribute("class", lastEl.className.replace(" mouseover", ""))
+            e.target.setAttribute("class", `${e.target.className} mouseover`)
+        }
+
         lastEl = e.target
+        // logTable(state.actionPath)
     }
 
     document.addEventListener("mouseover", hoverHandler)
@@ -16,10 +26,23 @@ export const watchHover = function (state) {
 }
 
 export const watchClick = function (state) {
+    let lastTimeStamp = ""
     let clickHandler = e => {
+        let timeStamp = new Date().getTime()
         state.state = "CLICK"
-        state.actionPath.push(new Action("CLICK", e, state))
+        let lastAction = state.actionPath[state.actionPath.length - 1]
+        let clicked = lastAction.EVENT === "CLICK" && (timeStamp - lastTimeStamp) < 10
+        if (!clicked) {
+            if (lastAction.EVENT === "HOVER") {
+                let copyAction = Object.assign(Object.create(lastAction), lastAction)
+                copyAction.setEvent("CLICK")
+                state.actionPath.push(copyAction)
+            }
+            else state.actionPath.push(new Action("CLICK", e, state))
+        }
+
         logTable(state.actionPath)
+        lastTimeStamp = timeStamp
     }
     document.addEventListener("click", clickHandler)
     return () => document.removeEventListener("click", clickHandler)
@@ -37,6 +60,7 @@ export const watchCopy = function (state) {
 
 export const watchInput = function (state) {
     let inputHandler = e => {
+        if (e.target.type !== "text") return
         state.state = "INPUT"
         let lastAction = state.actionPath[state.actionPath.length - 1]
         if (lastAction.target === e.target && lastAction.EVENT === "INPUT") state.actionPath.pop()
@@ -54,7 +78,7 @@ export const watchSelect = function (state) {
         logTable(state.actionPath)
     }
     document.addEventListener("optionclick", selectHandler)
-    
+
     return () => document.removeEventListener("optionclick", selectHandler)
 }
 
@@ -66,7 +90,7 @@ export const watchHash = function (state) {
     return () => document.removeEventListener("hashchange", hashHandler)
 }
 
-const logTable = function(data){
-    // console.clear()
+const logTable = function (data) {
+    console.clear()
     console.table(data)
 }

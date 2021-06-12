@@ -7,8 +7,12 @@ const writeFile = function (json) {
 
         query = `cy.get('${action.query.query}').eq(${action.query.nth})`
 
+        if (action.EVENT === "HOVER") caseCode += `
+        ${query}.invoke('mouseover')
+        `
+
         if (action.EVENT === "CLICK") caseCode += `
-        ${query}.click()
+        ${query}.click({ force: true })
         `
 
         if (action.EVENT === "INPUT") caseCode += `
@@ -28,6 +32,7 @@ const writeFile = function (json) {
         `
     })
 
+
     caseCode = `
     export default function(){
         ${caseCode}
@@ -39,4 +44,3 @@ const writeFile = function (json) {
 module.exports = {
     writeFile
 }
-
