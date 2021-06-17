@@ -128,9 +128,9 @@
         }
       },
 
-      selectOptionClick() {
-        var evt = document.createEvent('HTMLEvents');
-        evt.initEvent('optionclick', true, true);
+      selectOptionClick(e) {
+        var evt = document.createEvent('MouseEvents');
+        evt.initMouseEvent('optionclick', true, true, window, 1, e.screenX, e.screenY, e.clientX, e.clientY, false, false, false, false, 0, null);
         this.$el.dispatchEvent(evt);
         if (this.disabled !== true && this.groupDisabled !== true) {
           this.dispatch('ElSelect', 'handleOptionClick', [this, true]);

@@ -3,16 +3,20 @@ const writeFile = function (json) {
     json.forEach((action, index) => {
         if (action.EVENT === "VISIT") return caseCode += `
         cy.visit("${action.visitUrl}")
+        cy.wait(5000)
         `
 
         query = `cy.get('${action.query.query}').eq(${action.query.nth})`
 
-        if (action.EVENT === "HOVER") caseCode += `
-        ${query}.invoke('mouseover')
-        `
+        // if (action.EVENT === "HOVER") caseCode += `
+        // ${query}.invoke('mouseover')
+        // `
 
         if (action.EVENT === "CLICK") caseCode += `
-        ${query}.click({ force: true })
+        cy.get("body").click({
+            x: ${action.position.x},
+            y: ${action.position.y},
+        })
         `
 
         if (action.EVENT === "INPUT") caseCode += `

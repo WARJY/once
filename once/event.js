@@ -73,6 +73,7 @@ export const watchInput = function (state) {
 
 export const watchSelect = function (state) {
     let selectHandler = e => {
+        console.log(e)
         state.state = "CLICK"
         state.actionPath.push(new Action("CLICK", e, state))
         logTable(state.actionPath)

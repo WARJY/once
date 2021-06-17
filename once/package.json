@@ -1,11 +1,39 @@
 {
-  "name": "test-once",
-  "version": "1.0.1",
+  "_from": "test-once",
+  "_id": "test-once@1.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-b2EopJ4QUFnAZltZsTMwZYXyV8D5whj/n8UUNGjtHeQnvtY2JYxQ9lJpo2FwspEHh8JdqX5QnMZVnZqrCkWpyw==",
+  "_location": "/test-once",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "test-once",
+    "name": "test-once",
+    "escapedName": "test-once",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#DEV:/",
+    "#USER"
+  ],
+  "_resolved": "https://registry.npmjs.org/test-once/-/test-once-1.0.1.tgz",
+  "_shasum": "77091d7294f163bd9b8e5417c1c794c20d75c02d",
+  "_spec": "test-once",
+  "_where": "D:\\workspace-futunn\\svc_mgt_frontend",
+  "author": {
+    "name": "nikoguo"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
   "description": "",
+  "license": "ISC",
   "main": "index.js",
+  "name": "test-once",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "nikoguo",
-  "license": "ISC"
+  "version": "1.0.1"
 }

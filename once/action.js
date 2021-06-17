@@ -62,8 +62,8 @@ Action.prototype.getQueryByth = function (el) {
 Action.prototype.getQuery = function (el, path, hash) {
     if (!path) return
 
-    let selector = generator.getSelector(el)
-    let path2 = generator.getPath(el)
+    let path2 = generator.getSelector(el)
+    // let path2 = generator.getPath(el)
 
     path2 = path2.replace(/.mouseover/g, "")
     path2 = path2.replace(".hover", "")
