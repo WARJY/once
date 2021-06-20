@@ -4,15 +4,15 @@ const writeFile = function (json) {
         if (action.EVENT === "VISIT") return caseCode += `
         cy.viewport(${action.viewPort.width}, ${action.viewPort.height})
         cy.visit("${action.visitUrl}")
-        cy.wait(1000)
+        cy.wait(5000)
         `
 
         let query = ""
         if(action.query) query = `cy.get('${action.query.query}').eq(${action.query.nth})`
 
-        if (action.EVENT === "HOVER") caseCode += `
-        ${query}.invoke('mouseover')
-        `
+        // if (action.EVENT === "HOVER") caseCode += `
+        // ${query}.invoke('mouseover')
+        // `
 
         if (action.EVENT === "CLICK") caseCode += `
         cy.get("body").click(${action.position.x}, ${action.position.y})
