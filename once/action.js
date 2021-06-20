@@ -10,16 +10,27 @@ export class Action {
         this.EVENT = EVENT
         this.target = e.target
         this.position = {
-            x: e.x,
-            y: e.y
+            x: e.pageX,
+            y: e.pageY
         }
-        this.query = this.getQuery(e.target, e.path, state.hash)
         this.text = e.target ? e.target.innerText : ""
-        if (EVENT === "VISIT") this.visitUrl = window.location.href
+        if (e.target !== document) this.query = this.getQuery(e.target, e.path, state.hash)
+
+        if (EVENT === "VISIT") {
+            this.visitUrl = window.location.href
+            this.viewPort = {
+                width: window.innerWidth,
+                height: window.innerHeight
+            }
+        }
         if (EVENT === "ASSERT") this.assertValue = e.target.innerText
         if (EVENT === "ASSERT") this.assertUrl = this.getRouter(state.vm)
         if (EVENT === "INPUT") this.inputValue = e.target.value
         if (EVENT === "SELECT") this.selectValue = e.value
+        if (EVENT === "SCROLL") this.scroll = {
+            x: window.pageXOffset,
+            y: window.pageYOffset,
+        }
         // Object.freeze(this)
     }
 }

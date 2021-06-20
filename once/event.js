@@ -28,6 +28,7 @@ export const watchHover = function (state) {
 export const watchClick = function (state) {
     let lastTimeStamp = ""
     let clickHandler = e => {
+        console.log(e)
         let timeStamp = new Date().getTime()
         state.state = "CLICK"
         let lastAction = state.actionPath[state.actionPath.length - 1]
@@ -71,6 +72,19 @@ export const watchInput = function (state) {
     return () => document.removeEventListener("input", inputHandler)
 }
 
+export const watchScroll = function (state) {
+    let scrollHandler = e => {
+        state.state = "SCROLL"
+        let lastAction = state.actionPath[state.actionPath.length - 1]
+        if (lastAction.target === e.target && lastAction.EVENT === "SCROLL") state.actionPath.pop()
+        state.actionPath.push(new Action("SCROLL", e, state))
+        logTable(state.actionPath)
+    }
+    document.addEventListener("scroll", scrollHandler)
+
+    return () => document.removeEventListener("scroll", scrollHandler)
+}
+
 export const watchSelect = function (state) {
     let selectHandler = e => {
         state.state = "CLICK"
@@ -90,7 +104,45 @@ export const watchHash = function (state) {
     return () => document.removeEventListener("hashchange", hashHandler)
 }
 
+export const watchClickElement = function (state) {
+    let els = []
+
+    const updateEls = query => {
+        let el = Array.from(document.querySelectorAll(query))
+        els = [...new Set(els.concat(el))]
+    }
+
+    updateEls(".el-cascader-node__label")
+    updateEls(".el-select")
+    updateEls(".el-select-dropdown__item")
+
+    const clickElementHandler = e => {
+        state.state = "CLICK"
+        state.actionPath.push(new Action("CLICK", e, state))
+        logTable(state.actionPath)
+
+        updateEls(".el-cascader-node__label")
+        updateEls(".el-select")
+        updateEls(".el-select-dropdown__item")
+
+        els.forEach((item, index) => {
+            item.removeEventListener("click", clickElementHandler)
+            item.addEventListener("click", clickElementHandler)
+        })
+    }
+
+    els.forEach((item, index) => {
+        item.addEventListener("click", clickElementHandler)
+    })
+
+    return () => {
+        els.forEach((item, index) => {
+            item.removeEventListener("click", clickElementHandler)
+        })
+    }
+}
+
 const logTable = function (data) {
-    console.clear()
+    // console.clear()
     console.table(data)
 }

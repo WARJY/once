@@ -2,17 +2,26 @@ const writeFile = function (json) {
     let caseCode = ""
     json.forEach((action, index) => {
         if (action.EVENT === "VISIT") return caseCode += `
+        cy.viewport(${action.viewPort.width}, ${action.viewPort.height})
         cy.visit("${action.visitUrl}")
+        cy.wait(1000)
         `
 
-        query = `cy.get('${action.query.query}').eq(${action.query.nth})`
+        let query = ""
+        if(action.query) query = `cy.get('${action.query.query}').eq(${action.query.nth})`
 
         if (action.EVENT === "HOVER") caseCode += `
         ${query}.invoke('mouseover')
         `
 
         if (action.EVENT === "CLICK") caseCode += `
-        ${query}.click({ force: true })
+        cy.get("body").click(${action.position.x}, ${action.position.y})
+        cy.wait(500)
+        `
+
+        if (action.EVENT === "SCROLL") caseCode += `
+        cy.scrollTo(${parseInt(action.scroll.x)}, ${parseInt(action.scroll.y)})
+        cy.wait(500)
         `
 
         if (action.EVENT === "INPUT") caseCode += `

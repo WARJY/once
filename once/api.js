@@ -1,8 +1,8 @@
-import { watchHover, watchClick, watchCopy, watchInput, watchHash, watchSelect } from './event.js'
+import { watchClick, watchCopy, watchInput, watchHash, watchScroll, watchClickElement } from './event.js'
 import { Action } from './action.js'
 import { writeFile } from './server/index.js'
 
-export const initApi = function (data) {
+export const initApi = function (data, params) {
 
     const testCaseStop = []
 
@@ -13,15 +13,23 @@ export const initApi = function (data) {
         let watchCopyStop = watchCopy(data)
         let watchInputStop = watchInput(data)
         let watchHashStop = watchHash(data)
-        let watchHoverStop = watchHover(data)
-        let watchSelectStop = watchSelect(data)
+        let watchScrollStop = watchScroll(data)
+        // let watchHoverStop = watchHover(data)
+        // let watchSelectStop = watchSelect(data)
+        
 
         testCaseStop.push(watchClickStop)
         testCaseStop.push(watchCopyStop)
         testCaseStop.push(watchInputStop)
         testCaseStop.push(watchHashStop)
-        testCaseStop.push(watchHoverStop)
-        testCaseStop.push(watchSelectStop)
+        testCaseStop.push(watchScrollStop)
+        // testCaseStop.push(watchHoverStop)
+        // testCaseStop.push(watchSelectStop)
+
+        if(params.element === true){
+            let watchClickElementStop = watchClickElement(data)
+            testCaseStop.push(watchClickElementStop)
+        }
 
         return console.log("testcase 开始！")
     }

@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <img alt="Vue logo" src="../assets/logo.png" />
-        <HelloWorld msg="Welcome to Your Vue.js App" />
+        <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
         <el-input v-model="input"></el-input>
         <el-select v-model="input2">
             <el-option label="1" value="1"></el-option>
@@ -22,6 +22,9 @@
         </el-checkbox-group>
         <el-cascader v-model="value5" :options="options" :props="{ expandTrigger: 'hover' }"></el-cascader>
         <el-switch v-model="value6" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        <div>
+            <el-transfer filter-placeholder="请输入城市拼音" v-model="value7" :data="data"></el-transfer>
+        </div>
     </div>
 </template>
 
@@ -35,6 +38,19 @@ export default {
         HelloWorld
     },
     data() {
+        const generateData = _ => {
+            const data = [];
+            const cities = ['上海', '北京', '广州', '深圳', '南京', '西安', '成都'];
+            const pinyin = ['shanghai', 'beijing', 'guangzhou', 'shenzhen', 'nanjing', 'xian', 'chengdu'];
+            cities.forEach((city, index) => {
+                data.push({
+                    label: city,
+                    key: index,
+                    pinyin: pinyin[index]
+                });
+            });
+            return data;
+        };
         return {
             input: "",
             input2: "",
@@ -236,7 +252,9 @@ export default {
                     label: '组件交互文档'
                 }]
             }],
-            value6: ""
+            value6: "",
+            data: generateData(),
+            value7: [],
         }
     },
     mounted() {
