@@ -1,4 +1,4 @@
-import { watchClick, watchCopy, watchInput, watchHash, watchScroll, watchClickElement } from './event.js'
+import { watchClick, watchCopy, watchInput, watchHash, watchScroll, watchClickElement, watchInputElement } from './event.js'
 import { Action } from './action.js'
 import { writeFile } from './server/index.js'
 
@@ -28,7 +28,9 @@ export const initApi = function (data, params) {
 
         if(params.element === true){
             let watchClickElementStop = watchClickElement(data)
+            let watchInputElementStop = watchInputElement(data)
             testCaseStop.push(watchClickElementStop)
+            testCaseStop.push(watchInputElementStop)
         }
 
         return console.log("testcase 开始！")

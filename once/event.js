@@ -143,7 +143,45 @@ export const watchClickElement = function (state) {
     }
 }
 
+export const watchInputElement = function (state) {
+    let els = []
+
+    const updateEls = query => {
+        let el = Array.from(document.querySelectorAll(query))
+        els = [...new Set(els.concat(el))]
+    }
+
+    updateEls(".el-textarea__inner")
+
+    const clickElementHandler = e => {
+        state.state = "INPUT"
+        let lastAction = state.actionPath[state.actionPath.length - 1]
+        if (lastAction.target === e.target && lastAction.EVENT === "INPUT") state.actionPath.pop()
+        state.actionPath.push(new Action("INPUT", e, state))
+        logTable(state.actionPath)
+
+        setTimeout(() => {
+            updateEls(".el-textarea__inner")
+
+            els.forEach((item, index) => {
+                item.removeEventListener("input", clickElementHandler)
+                item.addEventListener("input", clickElementHandler)
+            })
+        }, 200)
+    }
+
+    els.forEach((item, index) => {
+        item.addEventListener("input", clickElementHandler)
+    })
+
+    return () => {
+        els.forEach((item, index) => {
+            item.removeEventListener("input", clickElementHandler)
+        })
+    }
+}
+
 const logTable = function (data) {
-    // console.clear()
+    console.clear()
     console.table(data)
 }
