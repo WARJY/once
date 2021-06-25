@@ -1,4 +1,5 @@
 import { Action } from './action'
+import $ from 'jquery'
 
 export const watchHover = function (state) {
     let lastEl = ""
@@ -109,10 +110,11 @@ export const watchClickElement = function (state) {
     let els = []
 
     const updateEls = query => {
-        let el = Array.from(document.querySelectorAll(query))
+        let el = Array.from($(`${query}:visible`))
         els = [...new Set(els.concat(el))]
     }
 
+    updateEls(".el-cascader")
     updateEls(".el-cascader-node__label")
     updateEls(".el-select")
     updateEls(".el-select-dropdown__item")
@@ -122,14 +124,17 @@ export const watchClickElement = function (state) {
         state.actionPath.push(new Action("CLICK", e, state))
         logTable(state.actionPath)
 
-        updateEls(".el-cascader-node__label")
-        updateEls(".el-select")
-        updateEls(".el-select-dropdown__item")
+        setTimeout(() => {
+            updateEls(".el-cascader")
+            updateEls(".el-cascader-node__label")
+            updateEls(".el-select")
+            updateEls(".el-select-dropdown__item")
 
-        els.forEach((item, index) => {
-            item.removeEventListener("click", clickElementHandler)
-            item.addEventListener("click", clickElementHandler)
-        })
+            els.forEach((item, index) => {
+                item.removeEventListener("click", clickElementHandler)
+                item.addEventListener("click", clickElementHandler)
+            })
+        }, 500)
     }
 
     els.forEach((item, index) => {
