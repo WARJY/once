@@ -1,38 +1,50 @@
 import { Action } from './action'
 import $ from 'jquery'
+import { emitter } from 'cutil'
+import { state } from './store'
 
-export const watchHover = function (state) {
-    let lastEl = ""
-    let hoverHandler = e => {
-        if (lastEl === e.target) return
-
-        state.state = "HOVER"
-        let lastAction = state.actionPath[state.actionPath.length - 1]
-        if (lastAction.EVENT === "HOVER") state.actionPath.pop()
-        state.actionPath.push(new Action("HOVER", e, state))
-
-        if (e.target.className) {
-            if (lastEl) lastEl.setAttribute("class", lastEl.className.replace(" mouseover", ""))
-            e.target.setAttribute("class", `${e.target.className} mouseover`)
-        }
-
-        lastEl = e.target
-        // logTable(state.actionPath)
-    }
-
-    document.addEventListener("mouseover", hoverHandler)
-    return () => {
-        document.removeEventListener("mouseover", hoverHandler)
-    }
+const updateEls = querys => {
+    let els = []
+    querys.forEach((item, index) => {
+        let el = Array.from($(`${item}`))
+        els = [...new Set(els.concat(el))]
+    })
+    return els
 }
 
-export const watchClick = function (state) {
+export const watchClick = function () {
+
+    // 判断是否关闭了事件监听
+    let isOff = state.option?.click === false
+    if (isOff) return () => { }
+
+    // 记录上一次触发的时间戳
     let lastTimeStamp = ""
+
+    // 判断是否需要注入特殊元素的事件监听
+    let injextElClass = state.option?.click?.query
+    let injectEls = []
+    if (injextElClass?.length > 0) injectEls = updateEls(injextElClass)
+
+    // 模态框确认事件
+    emitter.on("modal-confirm", () => {
+        injectEls = updateEls(injextElClass)
+        injectEls.forEach((item, index) => {
+            item.removeEventListener("click", clickHandler)
+            item.addEventListener("click", clickHandler)
+        })
+        emitter.emit("modal", false)
+    })
+
+    // 事件处理函数
     let clickHandler = e => {
-        console.log(e)
         let timeStamp = new Date().getTime()
         state.state = "CLICK"
         let lastAction = state.actionPath[state.actionPath.length - 1]
+
+        if (lastAction.EVENT === "CLICK" && lastAction.position.x === e.pageX && lastAction.position.y === e.pageY) return
+
+        // 兼容多次触发的情况
         let clicked = lastAction.EVENT === "CLICK" && (timeStamp - lastTimeStamp) < 10
         if (!clicked) {
             if (lastAction.EVENT === "HOVER") {
@@ -40,17 +52,21 @@ export const watchClick = function (state) {
                 copyAction.setEvent("CLICK")
                 state.actionPath.push(copyAction)
             }
-            else state.actionPath.push(new Action("CLICK", e, state))
         }
+
+        state.actionPath.push(new Action("CLICK", e, state))
 
         logTable(state.actionPath)
         lastTimeStamp = timeStamp
+
+        emitter.emit("modal", true)
     }
+
     document.addEventListener("click", clickHandler)
     return () => document.removeEventListener("click", clickHandler)
 }
 
-export const watchCopy = function (state) {
+export const watchCopy = function () {
     let copyHandler = e => {
         state.state = "ASSERT"
         state.actionPath.push(new Action("ASSERT", e, state))
@@ -60,7 +76,17 @@ export const watchCopy = function (state) {
     return () => document.removeEventListener("copy", copyHandler)
 }
 
-export const watchInput = function (state) {
+export const watchInput = function () {
+
+    // 判断是否关闭了事件监听
+    let isOff = state.option?.input === false
+    if (isOff) return () => { }
+
+    // 判断是否需要注入特殊元素的事件监听
+    let injextElClass = state.option?.click?.query
+    let injectEls = []
+    if (injextElClass?.length > 0) injectEls = updateEls(injextElClass)
+
     let inputHandler = e => {
         if (e.target.type !== "text") return
         state.state = "INPUT"
@@ -69,11 +95,21 @@ export const watchInput = function (state) {
         state.actionPath.push(new Action("INPUT", e, state))
         logTable(state.actionPath)
     }
+
+    injectEls.forEach((item, index) => {
+        item.addEventListener("input", inputHandler)
+    })
     document.addEventListener("input", inputHandler)
-    return () => document.removeEventListener("input", inputHandler)
+
+    return () => {
+        document.removeEventListener("input", inputHandler)
+        injectEls.forEach((item, index) => {
+            item.removeEventListener("input", inputHandler)
+        })
+    }
 }
 
-export const watchScroll = function (state) {
+export const watchScroll = function () {
     let scrollHandler = e => {
         state.state = "SCROLL"
         let lastAction = state.actionPath[state.actionPath.length - 1]
@@ -86,104 +122,12 @@ export const watchScroll = function (state) {
     return () => document.removeEventListener("scroll", scrollHandler)
 }
 
-export const watchSelect = function (state) {
-    let selectHandler = e => {
-        console.log(e)
-        state.state = "CLICK"
-        state.actionPath.push(new Action("CLICK", e, state))
-        logTable(state.actionPath)
-    }
-    document.addEventListener("optionclick", selectHandler)
-
-    return () => document.removeEventListener("optionclick", selectHandler)
-}
-
-export const watchHash = function (state) {
+export const watchHash = function () {
     let hashHandler = e => {
         console.log(e)
     }
     document.addEventListener("hashchange", hashHandler)
     return () => document.removeEventListener("hashchange", hashHandler)
-}
-
-export const watchClickElement = function (state) {
-    let els = []
-
-    const updateEls = query => {
-        let el = Array.from($(`${query}:visible`))
-        els = [...new Set(els.concat(el))]
-    }
-
-    updateEls(".el-cascader")
-    updateEls(".el-cascader-node__label")
-    updateEls(".el-select")
-    updateEls(".el-select-dropdown__item")
-
-    const clickElementHandler = e => {
-        state.state = "CLICK"
-        state.actionPath.push(new Action("CLICK", e, state))
-        logTable(state.actionPath)
-
-        setTimeout(() => {
-            updateEls(".el-cascader")
-            updateEls(".el-cascader-node__label")
-            updateEls(".el-select")
-            updateEls(".el-select-dropdown__item")
-
-            els.forEach((item, index) => {
-                item.removeEventListener("click", clickElementHandler)
-                item.addEventListener("click", clickElementHandler)
-            })
-        }, 500)
-    }
-
-    els.forEach((item, index) => {
-        item.addEventListener("click", clickElementHandler)
-    })
-
-    return () => {
-        els.forEach((item, index) => {
-            item.removeEventListener("click", clickElementHandler)
-        })
-    }
-}
-
-export const watchInputElement = function (state) {
-    let els = []
-
-    const updateEls = query => {
-        let el = Array.from(document.querySelectorAll(query))
-        els = [...new Set(els.concat(el))]
-    }
-
-    updateEls(".el-textarea__inner")
-
-    const clickElementHandler = e => {
-        state.state = "INPUT"
-        let lastAction = state.actionPath[state.actionPath.length - 1]
-        if (lastAction.target === e.target && lastAction.EVENT === "INPUT") state.actionPath.pop()
-        state.actionPath.push(new Action("INPUT", e, state))
-        logTable(state.actionPath)
-
-        setTimeout(() => {
-            updateEls(".el-textarea__inner")
-
-            els.forEach((item, index) => {
-                item.removeEventListener("input", clickElementHandler)
-                item.addEventListener("input", clickElementHandler)
-            })
-        }, 200)
-    }
-
-    els.forEach((item, index) => {
-        item.addEventListener("input", clickElementHandler)
-    })
-
-    return () => {
-        els.forEach((item, index) => {
-            item.removeEventListener("input", clickElementHandler)
-        })
-    }
 }
 
 const logTable = function (data) {

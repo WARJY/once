@@ -1,11 +1,12 @@
 import $, { css } from 'jquery'
 import 'selector-generator'
+import { state } from './store'
 
 const generator = new SelectorGenerator();
 
 // 测试行为
 export class Action {
-    constructor(EVENT, e, state) {
+    constructor(EVENT, e) {
         this.timeStamp = new Date().getTime()
         this.EVENT = EVENT
         this.target = e.target

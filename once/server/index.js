@@ -16,12 +16,10 @@ const writeFile = function (json) {
 
         if (action.EVENT === "CLICK") caseCode += `
         cy.get("body").click(${action.position.x}, ${action.position.y})
-        cy.wait(500)
         `
 
         if (action.EVENT === "SCROLL") caseCode += `
         cy.scrollTo(${parseInt(action.scroll.x)}, ${parseInt(action.scroll.y)})
-        cy.wait(500)
         `
 
         if (action.EVENT === "INPUT") caseCode += `
@@ -38,6 +36,13 @@ const writeFile = function (json) {
         ${query}.should(($div) => {
             expect($div.get(0).innerText).to.eq('${action.assertValue}')
         })
+        `
+
+        let wait = 0
+        let next = json[index+1]
+        if(next) wait = next.timeStamp - action.timeStamp
+        caseCode += `
+        cy.wait(${wait + 500})
         `
     })
 
