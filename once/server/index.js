@@ -19,7 +19,7 @@ const writeFile = function (json) {
         `
 
         if (action.EVENT === "SCROLL") caseCode += `
-        cy.scrollTo(${parseInt(action.scroll.x)}, ${parseInt(action.scroll.y)})
+        ${query}.scrollTo(${parseInt(action.scroll.x)}, ${parseInt(action.scroll.y)})
         `
 
         if (action.EVENT === "INPUT") caseCode += `

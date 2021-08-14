@@ -6,16 +6,24 @@ import { state } from './store'
 // 初始化API
 export const initApi = function () {
 
+    const eventMap = {
+        click: watchClick,
+        input: watchInput,
+        copy: watchCopy,
+        hash: watchHash,
+        scroll: watchScroll
+    }
     const testCaseStop = []
 
     // 开始录制
     window.testCaseBegin = () => {
         state.actionPath.push(new Action("VISIT", {}))
-        
-        const eventList = [watchClick, watchCopy, watchInput, watchHash, watchScroll]
-        eventList.forEach((item, index) => {
-            testCaseStop.push(item())
+
+        Object.keys(eventMap).forEach((event,index)=>{
+            if(state.option[event] === false) return
+            testCaseStop.push(eventMap[event]())
         })
+
         return console.log("testcase 开始！")
     }
 

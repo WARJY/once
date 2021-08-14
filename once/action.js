@@ -29,8 +29,8 @@ export class Action {
         if (EVENT === "INPUT") this.inputValue = e.target.value
         if (EVENT === "SELECT") this.selectValue = e.value
         if (EVENT === "SCROLL") this.scroll = {
-            x: window.pageXOffset,
-            y: window.pageYOffset,
+            x: e.target.scrollLeft,
+            y: e.target.scrollTop,
         }
         // Object.freeze(this)
     }

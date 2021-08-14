@@ -6,8 +6,29 @@ export const state = {
     option: ""
 }
 
+const baseOption = {
+    click: {
+        query: []
+    },
+    input: {
+        query: []
+    },
+    copy: {
+        query: []
+    },
+    hash: {
+        query: []
+    },
+    scroll: {
+        query: []
+    }
+}
+
 export const initData = function (vm, params) {
-    state.option = params
+    state.option = {
+        ...baseOption,
+        ...params
+    }
     state.vm = vm
     let allEls = Array.from(document.querySelectorAll("*"))
     while (allEls.length > 0) {

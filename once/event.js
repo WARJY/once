@@ -14,17 +14,13 @@ const updateEls = querys => {
 
 export const watchClick = function () {
 
-    // 判断是否关闭了事件监听
-    let isOff = state.option?.click === false
-    if (isOff) return () => { }
-
     // 记录上一次触发的时间戳
     let lastTimeStamp = ""
 
     // 判断是否需要注入特殊元素的事件监听
-    let injextElClass = state.option?.click?.query
+    let injextElClass = state.option.click.query
     let injectEls = []
-    if (injextElClass?.length > 0) injectEls = updateEls(injextElClass)
+    if (injextElClass.length > 0) injectEls = updateEls(injextElClass)
 
     // 模态框确认事件
     emitter.on("modal-confirm", () => {
@@ -63,7 +59,16 @@ export const watchClick = function () {
     }
 
     document.addEventListener("click", clickHandler)
-    return () => document.removeEventListener("click", clickHandler)
+    injectEls.forEach((item, index) => {
+        item.addEventListener("click", clickHandler)
+    })
+
+    return () => {
+        document.removeEventListener("click", clickHandler)
+        injectEls.forEach((item, index) => {
+            item.addEventListener("click", clickHandler)
+        })
+    }
 }
 
 export const watchCopy = function () {
@@ -78,14 +83,10 @@ export const watchCopy = function () {
 
 export const watchInput = function () {
 
-    // 判断是否关闭了事件监听
-    let isOff = state.option?.input === false
-    if (isOff) return () => { }
-
     // 判断是否需要注入特殊元素的事件监听
-    let injextElClass = state.option?.click?.query
+    let injextElClass = state.option.click.query
     let injectEls = []
-    if (injextElClass?.length > 0) injectEls = updateEls(injextElClass)
+    if (injextElClass.length > 0) injectEls = updateEls(injextElClass)
 
     let inputHandler = e => {
         if (e.target.type !== "text") return
@@ -110,16 +111,32 @@ export const watchInput = function () {
 }
 
 export const watchScroll = function () {
+
+    // 判断是否需要注入特殊元素的事件监听
+    let injextElClass = state.option.scroll.query
+    let injectEls = []
+    if (injextElClass.length > 0) injectEls = updateEls(injextElClass)
+
     let scrollHandler = e => {
+        console.log(e)
         state.state = "SCROLL"
         let lastAction = state.actionPath[state.actionPath.length - 1]
         if (lastAction.target === e.target && lastAction.EVENT === "SCROLL") state.actionPath.pop()
         state.actionPath.push(new Action("SCROLL", e, state))
         logTable(state.actionPath)
     }
+
+    injectEls.forEach((item, index) => {
+        item.addEventListener("scroll", scrollHandler)
+    })
     document.addEventListener("scroll", scrollHandler)
 
-    return () => document.removeEventListener("scroll", scrollHandler)
+    return () => {
+        injectEls.forEach((item, index) => {
+            item.removeEventListener("scroll", scrollHandler)
+        })
+        document.removeEventListener("scroll", scrollHandler)
+    }
 }
 
 export const watchHash = function () {
