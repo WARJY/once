@@ -42,7 +42,7 @@ const writeFile = function (json) {
         let next = json[index+1]
         if(next) wait = next.timeStamp - action.timeStamp
         caseCode += `
-        cy.wait(${wait + 500})
+        cy.wait(${wait})
         `
     })
 
