@@ -3,7 +3,7 @@ import initModal from './modal'
 import { state, initData } from './store'
 
 const init = function (vm, params) {
-    if (state.vm) return
+    if (state.vm) return state.vm = vm
     initData(vm, params)
     initApi()
     initModal()
