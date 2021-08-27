@@ -3,7 +3,10 @@ import initModal from './modal'
 import { state, initData } from './store'
 
 const init = function (vm, params) {
-    if (state.vm) return state.vm = vm
+    if (state.vm) {
+        if (!vm.$route) return
+        return state.vm = vm
+    }
     initData(vm, params)
     initApi()
     initModal()
